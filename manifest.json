@@ -1,0 +1,10 @@
+{
+  "id": "conceptio",
+  "name": "Conceptio",
+  "version": "0.1.0",
+  "minAppVersion": "1.4.0",
+  "description": "Search the open-access Conceptio archive from Obsidian — insert citations, write cited notes with frontmatter and a proof link, and keep a reading list in your vault.",
+  "author": "conceptio",
+  "authorUrl": "https://conceptio.app",
+  "isDesktopOnly": true
+}
