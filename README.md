@@ -30,14 +30,11 @@ cd conceptio-obsidian && npm install && npm run build
 
 Copy `manifest.json`, `main.js`, and `styles.css` into `<vault>/.obsidian/plugins/conceptio/` and enable **Conceptio** in *Settings → Community plugins*.
 
-### From the public repository
+### From the release (no build needed)
 
-[`0x923041-dotcom/conceptio-obsidian`](https://github.com/0x923041-dotcom/conceptio-obsidian) is the public home — the same tree this directory builds from, and the repo the community listing is submitted from. It currently carries **source only**: no release has been cut yet, and Obsidian, the community directory and **BRAT** all install from a **tagged release** whose assets are `manifest.json`, `main.js` and `styles.css` (not from the repo root — `main.js` is a build artifact here and is not committed). So until a release exists, install from source as above.
+[`0x923041-dotcom/conceptio-obsidian`](https://github.com/0x923041-dotcom/conceptio-obsidian) is the public home — the same tree this directory builds from, and the repo the community listing is submitted from. Take the three assets from its **[latest release](https://github.com/0x923041-dotcom/conceptio-obsidian/releases/latest)** (tag == `manifest.json`'s version) into `<vault>/.obsidian/plugins/conceptio/`, or point **BRAT** at this repository and let it do the same.
 
-```bash
-# once a release exists:
-# release tag == manifest.json "version", assets: manifest.json, main.js, styles.css
-```
+Obsidian, the community directory and BRAT all install from a **tagged release** rather than the repo root, because `main.js` is a build artifact here and is not committed. What the release publishes is byte-identical to what `npm run build` produces from this tree; that is checked, not assumed.
 
 The CLI itself:
 
