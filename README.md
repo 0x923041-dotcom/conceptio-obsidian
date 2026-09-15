@@ -7,8 +7,9 @@ A thin presenter over the public [`conceptio`](https://github.com/0x923041-dotco
 ## Requirements
 
 The `conceptio` CLI, **0.3.1 or newer** (`pip install -U conceptio-search`) —
-the structured status report the account panel renders arrived in 0.3.1, and on
-an older CLI the plugin degrades to the CLI's own human text. The CLI is where
+the structured status report the account panel renders arrived in 0.3.1
+(measured: 0.3.0 refuses `quota --json`; 0.3.1 accepts every call this plugin
+makes), and on an older CLI the plugin degrades to the CLI's own human text. The CLI is where
 auth, retries and the archive wire contract live; this plugin never talks to the
 API directly.
 
