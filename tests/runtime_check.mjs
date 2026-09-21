@@ -566,10 +566,6 @@ async function main() {
   }
   log(`  vault     "${answeredVault}" (confirmed — not a real vault)\n`);
 
-  // The oracle for everything that waits on the archive (see `waitForTrace`).
-  traceReset();
-  log(`  trace    ${installTracer()}\n`);
-
   // ------------------------------------------------------------- activation
 
   await check("the plugin is enabled, not merely present", async () => {
@@ -605,6 +601,21 @@ async function main() {
     assert(version === expected, `running v${version}, manifest declares v${expected}`);
     return `v${version} in vault "${answeredVault}"`;
   });
+
+  // The oracle for everything that waits on the archive (see `waitForTrace`).
+  //
+  // Installed HERE, after activation, and never before it: the tracer wraps
+  // `app.plugins.plugins.conceptio`, and that object does not exist until
+  // `setEnable` above instantiates the plugin. Installed earlier, the bridge
+  // half attached to nothing (`bridge false`) and every BRIDGE assertion below
+  // failed as "the bridge never reaches the shared CLI" — ten failures with one
+  // cause, describing the instrument rather than the plugin. The assertion on
+  // the install line is what keeps that from returning quietly: a tracer that
+  // did not attach must fail here, where it says so, not ten checks later.
+  traceReset();
+  const tracer = installTracer();
+  log(`  trace    ${tracer}\n`);
+  assert(tracer.includes("bridge true"), `the tracer's bridge half did not attach: ${tracer}`);
 
   // ----------------------------------------------- the CLI command catalogue
 
