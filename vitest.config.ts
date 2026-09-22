@@ -3,7 +3,8 @@ import * as path from "node:path";
 
 // The real `obsidian` module is a desktop runtime surface (and its npm package
 // is types + a stub). Tests get a local stub of exactly the API the plugin
-// uses, aliased here — same pattern as the Raycast extension's stub.
+// uses, aliased here — the pattern every client tree uses for its own runtime
+// module.
 export default defineConfig({
   resolve: {
     alias: {

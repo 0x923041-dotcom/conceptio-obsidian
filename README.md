@@ -2,7 +2,7 @@
 
 **Search the [Conceptio Open Knowledge Archive](https://conceptio.app) from inside your vault** — papers, standards, textbooks, case law, regulations, and technical documents — then insert a citation, write a cited note, or keep the paper for later.
 
-A thin presenter over the public [`conceptio`](https://github.com/0x923041-dotcom/conceptio-cli) CLI (`pip install conceptio-search`). The CLI owns auth, retries, rate-limit handling, and upgrade hints, so this plugin, the terminal, the MCP server, and the Neovim/Alfred/Raycast/VS Code surfaces share **one core** — there is no duplicated search, resolve, or citation logic. No credentials are embedded: the CLI resolves them from `conceptio auth`, `$CONCEPTIO_API_KEY`, or the plugin's settings, and requests go only to the configured API origin.
+A thin presenter over the public [`conceptio`](https://github.com/0x923041-dotcom/conceptio-cli) CLI (`pip install conceptio-search`). The CLI owns auth, retries, rate-limit handling, and upgrade hints, so this plugin, the terminal, the MCP server, and the Neovim/VS Code surfaces share **one core** — there is no duplicated search, resolve, or citation logic. No credentials are embedded: the CLI resolves them from `conceptio auth`, `$CONCEPTIO_API_KEY`, or the plugin's settings, and requests go only to the configured API origin.
 
 ## Requirements
 

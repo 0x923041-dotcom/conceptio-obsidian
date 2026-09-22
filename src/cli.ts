@@ -3,7 +3,7 @@
  *
  * Every archive call is executed by the shared `conceptio` CLI
  * (`pip install conceptio-search`) — the same core the terminal, the MCP
- * server, and the Neovim/Alfred/Raycast/VS Code surfaces use. Auth, retries,
+ * server, and the Neovim/VS Code surfaces use. Auth, retries,
  * rate-limit handling and the Dev-gate upgrade hints live there once; this
  * module only spawns it and decodes `--json`. Arguments are passed as a LIST
  * (never a shell string) and the configured credential travels as an
