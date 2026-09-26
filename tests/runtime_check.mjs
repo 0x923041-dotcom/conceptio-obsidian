@@ -196,8 +196,6 @@ const TRACE_FILE = path.join(RUN_DIR, "cli_trace.log");
  * is visible — the bridge records the parsed documents, not the request — and
  * writing it to a file rather than a pipe removes a real hazard: a piped
  * stderr that nobody drains fills its buffer and blocks the stub mid-request.
- * (That is not hypothetical: an unread pipe is what had a hand-run stub
- * wedged earlier in this work.)
  */
 const STUB_LOG = path.join(RUN_DIR, "stub.log");
 

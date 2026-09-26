@@ -230,9 +230,9 @@ There is also a **live loopback check**, off by default, that drives the plugin'
 CONCEPTIO_INTEGRATION=1 npm run test    # CONCEPTIO_LIVE_CLI / CONCEPTIO_LIVE_STUB / CONCEPTIO_PYTHON to override paths
 ```
 
-The second suite run in `check` is not redundant: the bundle lands next to `main.ts`, and Vite's default extension order would let `main.js` shadow the source for any test importing it. `vitest.config.ts` pins source-first resolution, and the doubled run proves both orders green.
+`check` runs the suite twice on purpose: `main.js` lands next to `main.ts`, and Vite's default extension order would let the bundle shadow the source for any test importing it. `vitest.config.ts` pins source-first resolution, and the second run covers the bundled order too.
 
-**Verification status (2026-09-15):** TypeScript strict; **184 offline tests** (incl. the CLI command catalogue) plus **6 live loopback tests that drive the real `conceptio` CLI** (skipped unless `CONCEPTIO_INTEGRATION=1`); bundle builds to `main.js` (`obsidian` and Electron external).
+**Coverage:** TypeScript strict; the offline suite covers the plugin, the CLI command catalogue, and formatting; the loopback rows drive the real `conceptio` CLI and are skipped unless `CONCEPTIO_INTEGRATION=1`. The bundle builds to `main.js` (`obsidian` and Electron external).
 
 `tests/runtime_check.mjs` drives a **real Obsidian** through the **official Obsidian CLI** — `plugins:restrict off`, `plugin:enable`, `eval`, `dev:errors`, `dev:console` — on an isolated profile, then asserts the plugin's own command surface.
 
@@ -240,9 +240,9 @@ The second suite run in `check` is not redundant: the bundle lands next to `main
 node tests/runtime_check.mjs   # requires Obsidian installed and NOT already running
 ```
 
-It **refuses to run while another Obsidian is up**: the CLI's pipe is per user, not per profile, so a second instance cannot serve it and a client would silently reach the wrong app. For the same reason every invocation it makes carries `--user-data-dir=<scratch>`, and it aborts before any write unless `app.vault.getName()` answers with the scratch vault — a guard added after a flag-less client once answered from the live vault instead of the scratch one.
+It **refuses to run while another Obsidian is up**: the CLI's pipe is per user, not per profile, so a second instance cannot serve it and a client would silently reach the wrong app. For the same reason every invocation it makes carries `--user-data-dir=<scratch>`, and it aborts before any write unless `app.vault.getName()` answers with the scratch vault.
 
-**Live result (2026-09-15): 26/26 against a real Obsidian 1.13.7.** The isolated app attaches over the CLI; the vault identity is confirmed; the plugin activates at the version its manifest declares; all 11 `conceptio:*` commands **and** the base `conceptio <action>` command appear in `obsidian help` with their descriptions; a malformed invocation reports `Missing required parameter: id` exactly as a core command does; a search reaches the archive and a citation round-trips through the plugin and the CLI; creating a note writes a frontmattered file and inserting puts the citation into the open note; the reading-list export writes its note; the console and error buffers stay clean; and the two client limits measured above are pinned as checks that fail loudly should they ever change.
+The check asserts that the isolated app attaches over the CLI and the vault identity is confirmed; that the plugin activates at the version its manifest declares, and all 11 `conceptio:*` commands plus the base `conceptio <action>` appear in `obsidian help` with their descriptions; that a malformed invocation reports `Missing required parameter: id` exactly as a core command does; that a search reaches the archive and a citation round-trips through the plugin and the CLI; that creating a note writes a frontmattered file, inserting puts the citation into the open note, and the reading-list export writes its note; that the console and error buffers stay clean; and that the two client limits stated above are pinned as checks that fail loudly should they ever change.
 
 ## License
 
