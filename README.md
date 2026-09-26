@@ -69,9 +69,9 @@ obsidian conceptio:search query="zero trust" source=arxiv json   # namespaced
 obsidian conceptio search query="zero trust" source=arxiv json    # base command
 ```
 
-### Two spellings, and the base one is what always carries arguments
+### Two command spellings — the base one carries the arguments
 
-A measured property of the CLI (documented in full below) is that an `obsidian <plugin>:<action>` invocation **with any parameter** is refused before it reaches the plugin, while a command whose first token has no colon is handed its arguments normally. The plugin therefore also claims the plain **`conceptio`** command, which takes the action as its first word and routes to the very same handlers:
+The namespaced form `obsidian <plugin>:<action>` **with any parameter** is refused by the host before it reaches the plugin, while a command whose first token has no colon is handed its arguments normally. The plugin therefore also claims the plain **`conceptio`** command, which takes the action as its first word and routes to the very same handlers:
 
 ```bash
 obsidian conceptio                                  # account status
@@ -82,7 +82,7 @@ obsidian conceptio note id=7288
 obsidian conceptio reading-list
 ```
 
-**Quoting, measured rather than assumed.** In a shell, `query="zero trust"` is *syntax*: the shell consumes the quotes and hands `zero trust` as one argument, so the space reaches the archive intact. That was verified end to end — through `cmd.exe`, pwsh 7.6.3 and Windows PowerShell 5.1 (all three parse it identically; fixtures in `tests/shell-quoting/`, run by `npm test`) and then live, at the archive itself. The opposite is true when a process spawns the client with no shell: the quotes are then four literal characters *inside* the value, which is why `tests/runtime_check.mjs` passes its parameters quote-free.
+**Quoting rules.** In a shell, `query="zero trust"` is *syntax*: the shell consumes the quotes and hands `zero trust` as one argument, so the space reaches the archive intact (verified in `cmd.exe`, pwsh 7 and Windows PowerShell 5.1 — fixtures in `tests/shell-quoting/`, run by `npm test`). When a process spawns the client with **no** shell, the quotes are four literal characters *inside* the value — pass parameters quote-free (which is what `tests/runtime_check.mjs` does).
 
 **Nothing has to be reinstalled for this to work.** The namespaced commands stay the documented face — they are what `help` shows and what a current build carries — and the base command keeps every operation reachable on the build you already have. Both doors are built from one catalogue and delegate to one handler per action, so they cannot drift apart; a parameter the host does not know about is never silently dropped, because the base command declares the union of every action's parameters.
 
@@ -102,13 +102,13 @@ obsidian conceptio reading-list
 
 Turn the CLI on in *Settings → General → Command line interface*, then register it. `obsidian help` lists everything the plugin exposes.
 
-**Obsidian has to be running — the CLI is a thin client to it.** With no instance open, `obsidian <command>` does not queue or error: it **launches Obsidian** (opening your last vault) and *discards the command*, so all you see is a window. Obsidian's own code makes that explicit — when the app takes the primary-instance path, command-line arguments are read for `--enable-features` and nothing else; the CLI-forwarding path only runs when a lock is already held by a live instance. Start Obsidian first, then run the command. (Measured 2026-09-15, from a Windows terminal with the app closed: the prompt returns immediately, the app logs `Loading updated app package …`, a vault window opens, and the command produces no output.)
+**Obsidian has to be running — the CLI is a thin client to it.** With no instance open, `obsidian <command>` does not queue or error: it **launches Obsidian** (opening your last vault) and *discards the command*, so all you see is a window. Start Obsidian first, then run the command.
 
 `auth`, `download`, `save`, `search-job` and `mcp` are deliberately **not** mirrored: they are terminal concerns (a credential write, a file fetch, a Zotero hand-off, async job polling, a stdio server), not operations inside a vault.
 
-### The Obsidian CLI contract, as measured
+### The Obsidian CLI contract
 
-Everything below was measured against a live app (**Obsidian 1.13.7, installer 1.5.12, Windows**) by patching `window.handleCli` inside the renderer and comparing the app's own accounting with what the caller received. `tests/runtime_check.mjs` re-runs the whole matrix; the numbers are reproducible, not inferred.
+The host's own accounting, compared with what the caller receives — parameters, refusals, and how arguments reach a handler — verified against Obsidian 1.13.7 and re-run by `tests/runtime_check.mjs`:
 
 **It holds at a real console too.** The rigour here is deliberate: the automated harness invokes the CLI with pipes for stdio, and Obsidian is told whether its stdio is a terminal — so a hand-driven check was done with stdout attached to a genuine console (`GetConsoleMode` confirmed the TTY, and a console echo was read back through `ReadConsoleOutputCharacter` before anything was believed). A terminal changes **nothing**: `version` and a synchronous `eval` print, a promise resolving at t+1s or t+5s prints **nothing**, `conceptio:quota` prints its acknowledgement, and `conceptio:quota json` still exits `-1`. The instrument is `tmp/obsidian-runtime/tty_probe.py`.
 
