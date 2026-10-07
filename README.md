@@ -11,7 +11,7 @@ the structured status report the account panel renders arrived in 0.3.1
 (measured: 0.3.0 refuses `quota --json`; 0.3.1 accepts every call this plugin
 makes), and on an older CLI the plugin degrades to the CLI's own human text. The CLI is where
 auth, retries and the archive wire contract live; this plugin never talks to the
-API directly. The current release is 0.3.11.
+API directly. The current release is 0.3.14.
 
 - Obsidian **1.4+** on **desktop** (the plugin runs the CLI as a subprocess, so it is desktop-only by design)
 - Obsidian **1.12.2+** for the [Obsidian CLI commands](#obsidian-cli) — on older apps the plugin simply registers the palette commands only
